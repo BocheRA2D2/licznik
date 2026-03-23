@@ -1,9 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Map from './components/Map';
+import ClimbView from './components/ClimbView';
 import { useBikeComputer } from './hooks/useBikeComputer';
 import { useGhostRace } from './hooks/useGhostRace';
 import { formatTime, formatDistance, type Track } from './utils/geo';
+import { findClimbs, isInsideClimb, type ClimbSegment } from './utils/climb';
 import { Play, Square, History } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -22,6 +24,8 @@ const App: React.FC = () => {
   const [isRacing, setIsRacing] = useState(false);
   const [showLibrary, setShowLibrary] = useState(false);
   const [savedTracks, setSavedTracks] = useState<Track[]>([]);
+  const [climbs, setClimbs] = useState<ClimbSegment[]>([]);
+  const [activeClimb, setActiveClimb] = useState<ClimbSegment | null>(null);
 
   const { ghostPosition, timeGap, distanceGap } = useGhostRace(
     ghostTrack,
@@ -37,6 +41,24 @@ const App: React.FC = () => {
       setSavedTracks(JSON.parse(saved));
     }
   }, []);
+
+  // Pre-calculate climbs when ghost track changes
+  useEffect(() => {
+    if (ghostTrack) {
+      setClimbs(findClimbs(ghostTrack.points));
+    } else {
+      setClimbs([]);
+    }
+  }, [ghostTrack]);
+
+  // Detect if user is in a climb
+  useEffect(() => {
+    if (isRacing && currentPosition && climbs.length > 0) {
+      setActiveClimb(isInsideClimb(currentPosition, climbs));
+    } else {
+      setActiveClimb(null);
+    }
+  }, [isRacing, currentPosition, climbs]);
 
   const handleStart = () => {
     if (ghostTrack) {
@@ -100,6 +122,13 @@ const App: React.FC = () => {
             {ghostTrack ? ghostTrack.name : 'Brak'}
           </span>
         </div>
+
+        {/* ClimbPro View */}
+        {activeClimb && (
+          <div style={{ gridColumn: 'span 2' }}>
+             <ClimbView climb={activeClimb} userPosition={currentPosition} />
+          </div>
+        )}
 
         {/* Ghost Race Stats */}
         {isRacing && ghostTrack && (
@@ -185,10 +214,10 @@ const App: React.FC = () => {
                                 name: 'Testowa Trasa (Warszawa)',
                                 date: Date.now(),
                                 points: [
-                                    { lat: 52.2297, lng: 21.0122, timestamp: Date.now() },
-                                    { lat: 52.2307, lng: 21.0132, timestamp: Date.now() + 5000 },
-                                    { lat: 52.2317, lng: 21.0142, timestamp: Date.now() + 10000 },
-                                    { lat: 52.2327, lng: 21.0152, timestamp: Date.now() + 15000 }
+                                    { lat: 52.2297, lng: 21.0122, timestamp: Date.now(), altitude: 100 },
+                                    { lat: 52.2307, lng: 21.0132, timestamp: Date.now() + 5000, altitude: 110 },
+                                    { lat: 52.2317, lng: 21.0142, timestamp: Date.now() + 10000, altitude: 125 },
+                                    { lat: 52.2327, lng: 21.0152, timestamp: Date.now() + 15000, altitude: 140 }
                                 ],
                                 distance: 500,
                                 duration: 15
