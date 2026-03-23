@@ -81,7 +81,17 @@ body {
   flex-grow: 1;
   padding: 0 16px;
   position: relative;
-  min-height: 300px; /* Ensure map doesn't collapse to 0 height */
+  display: flex;
+}
+
+.map-inner-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  background-color: #242f3e; /* Visible placeholder color while loading */
+  z-index: 1;
 }
 
 .controls {

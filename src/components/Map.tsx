@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import type { Point } from '../utils/geo';
 import L from 'leaflet';
 
@@ -55,11 +54,11 @@ const Map: React.FC<MapProps> = ({ currentPosition, path, ghostPosition, ghostPa
   const ghostPositions = ghostPath ? ghostPath.map(p => [p.lat, p.lng] as [number, number]) : [];
 
   return (
-    <div style={{ height: '100%', width: '100%', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+    <div className="map-inner-container">
       <MapContainer 
         center={currentPosition ? [currentPosition.lat, currentPosition.lng] : [52.237, 21.017]} 
         zoom={13} 
-        style={{ height: '100%', width: '100%' }}
+        style={{ height: '100%', width: '100%', minHeight: '300px' }}
         zoomControl={false}
       >
         <TileLayer
