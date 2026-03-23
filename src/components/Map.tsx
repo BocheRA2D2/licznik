@@ -49,21 +49,32 @@ const RecenterMap = ({ position }: { position: Point | null }) => {
   return null;
 };
 
+const MapResizer = () => {
+  const map = useMap();
+  useEffect(() => {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 500);
+  }, [map]);
+  return null;
+};
+
 const Map: React.FC<MapProps> = ({ currentPosition, path, ghostPosition, ghostPath }) => {
   const pathPositions = path.map(p => [p.lat, p.lng] as [number, number]);
   const ghostPositions = ghostPath ? ghostPath.map(p => [p.lat, p.lng] as [number, number]) : [];
 
   return (
-    <div className="map-inner-container">
+    <div className="map-inner-container" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
       <MapContainer 
         center={currentPosition ? [currentPosition.lat, currentPosition.lng] : [52.237, 21.017]} 
         zoom={13} 
-        style={{ height: '100%', width: '100%', minHeight: '300px' }}
+        style={{ height: '100%', width: '100%', minHeight: '350px' }}
         zoomControl={false}
       >
+        <MapResizer />
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; OpenStreetMap'
         />
         
         {/* User Trail */}
