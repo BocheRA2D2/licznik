@@ -1,0 +1,147 @@
+
+:root {
+  --primary: #3b82f6;
+  --ghost: #ef4444;
+  --bg-dark: #0f172a;
+  --card-dark: #1e293b;
+  --text-main: #f8fafc;
+  --text-dim: #94a3b8;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow: hidden; /* Mobile app feel */
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: -webkit-fill-available;
+  width: 100vw;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+  background-color: var(--bg-dark);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-dark);
+}
+
+.metric-card {
+  background: var(--card-dark);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.metric-unit {
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+
+.ghost-card {
+  grid-column: span 2;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.ghost-lead {
+    color: #10b981; /* Green */
+}
+
+.ghost-lag {
+    color: #ef4444; /* Red */
+}
+
+.map-container-wrapper {
+  flex-grow: 1;
+  padding: 0 16px;
+  position: relative;
+}
+
+.controls {
+  padding: 16px 16px 24px 16px;
+  background: var(--bg-dark);
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  border: none;
+  padding: 16px 32px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-stop {
+  background-color: var(--ghost);
+  color: white;
+}
+
+.record-indicator {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  z-index: 1000;
+  background: rgba(0,0,0,0.5);
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  backdrop-filter: blur(4px);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
